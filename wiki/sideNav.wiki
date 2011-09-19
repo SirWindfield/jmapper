@@ -1,6 +1,5 @@
  * [Introduction About]
  * Getting Started
- * [Downloads download]
  * Mapping
   * Linker
   * Adapter
