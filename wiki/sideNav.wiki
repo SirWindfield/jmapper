@@ -1,10 +1,10 @@
  * [Introduction About]
- * Getting Started
+ * [GettingStarted Getting Started]
  * Mapping
-  * Linker
-  * Adapter
+  * [MappingLinker Linker]
+  * [MappingAdapater Adapter]
  * Extension
-  * Plugin
-  * Module
+  * [ExtPlugin Plugin]
+  * [ExtModule Module]
  * Community
   * [http://www.java-forum.org java-forum.org]
