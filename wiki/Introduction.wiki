@@ -36,4 +36,4 @@ class UseMyInterface {
 }}}
 
 I guess you've noticed, that myInterface is still linked to the map. Changes made on the interface will be evaluated on the map at once.
-You can do quit more to provide your custom access, keep on reading the wiki to get all posibilities.
+You can do quite more to provide your custom access, keep on reading the wiki to get all posibilities.
