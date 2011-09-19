@@ -6,3 +6,5 @@
  * Extension
   * Plugin
   * Module
+ * Community
+  [http://www.java-forum.org java-forum.org]
