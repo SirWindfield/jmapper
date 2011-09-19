@@ -1,4 +1,4 @@
-#labels Featured
+#labels Featured,Phase-Implementation
 =About=
 
 With JMapper you're able to create custom read/write rules on each propertie of your map. All you need, is to annotate the methods of your interface. 
@@ -16,7 +16,7 @@ public interface MyInterface
 
 JMapper is able to recognize java beans. If your interface is valid to the given bean convention, JMapper will work fine on them.
 
-It is quit easy, to use interface right now:
+It is quite easy, to use interface right now:
 
 {{{
 class UseMyInterface {
