@@ -1,9 +1,11 @@
  * [Introduction About]
  * [GettingStarted Getting Started]
  * Mapping
+  * [MappingInfo Info]
   * [MappingLinker Linker]
   * [MappingAdapater Adapter]
  * Extension
+  * [ExtInfo Info]
   * [ExtPlugin Plugin]
   * [ExtModule Module]
  * Community
