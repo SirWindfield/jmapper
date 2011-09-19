@@ -16,7 +16,7 @@ public interface MyInterface
 
 JMapper is able to recognize java beans. If your interface is valid to the given bean convention, JMapper will work fine on them.
 
-It is quite easy, to use interface right now:
+It is quite easy, to use the interface right now:
 
 {{{
 class UseMyInterface {
