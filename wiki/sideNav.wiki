@@ -10,4 +10,4 @@
   * [ExtPlugin Plugin]
   * [ExtModule Module]
  * Community
-  * <a href="http://www.java-forum.org" target="_new">java-forum.org</a>
+  * [http://www.java-forum.org java-forum.org]
