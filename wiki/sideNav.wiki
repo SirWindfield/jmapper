@@ -2,11 +2,11 @@
  * [AboutJMapper About JMapper]
  * [GettingStarted Getting Started]
  * Mapping
-  * [MappingInfo Info]
+  * [MappingInfo Information]
   * [MappingLinker Linker]
   * [MappingAdapater Adapter]
  * Extension
-  * [ExtInfo Info]
+  * [ExtInfo Information]
   * [ExtPlugin Plugin]
   * [ExtModule Module]
  * Community
