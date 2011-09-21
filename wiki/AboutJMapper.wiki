@@ -20,4 +20,4 @@ Yes, JMapper is modular and it differs between plugins and modules. You can find
 ==How does JMapper work?==
 JMapper defines your interface via reflection. Each access on the map happens inside the method. JMapper itself does *not* create any fields in the object returned by its factory. This is important, because you can not get the map out of the created object by reflection.
 
-So JMapper can provide strict access to your map.
+So JMapper can provide strict access on your map.
