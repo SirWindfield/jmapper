@@ -1,4 +1,5 @@
- * [Introduction About]
+ * [Introduction Introduction]
+ * [AboutJMapper About JMapper]
  * [GettingStarted Getting Started]
  * Mapping
   * [MappingInfo Info]
