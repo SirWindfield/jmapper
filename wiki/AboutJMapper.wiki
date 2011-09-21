@@ -11,7 +11,7 @@
 JMapper is a framework providing tools for linking an interface to an map. If you like to create fast and easily e.g. a read-only access to your map, then you should use JMapper. 
 
 ==Does JMapper supports osgi?==
-Actually JMapper is being developed as an OSGi bundle. So you are able to install JMapper in your OSGi-container. You don't need any third-party libs for getting OSGi working.
+Actually JMapper is being developed as an OSGi bundle. So you are able to install JMapper in your OSGi-container. You don't need any third-party libs for getting JMapper within OSGi.
 
 ==Is JMapper modular?==
 Yes, JMapper is modular and it differs between plugins and modules. You can find out more about modules and plugins [ExtInfo here].
