@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+= Extensions =
  * [ExtInfo#How_do_I_install_an_extension? How do I install an extension?]
  * [ExtInfo#Differences_between_plugin_and_module Differences between  plugin and module]
 
