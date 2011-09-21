@@ -4,6 +4,7 @@
  * [AboutJMapper#What_is_JMapper? What is JMapper?]
  * [AboutJMapper#Does_JMapper_supports_osgi? Does JMapper supports osgi?]
  * [AboutJMapper#Is_JMapper_modular? Is JMapper modular?]
+ * [AboutJMapper#How_does_JMapper_work? How does JMapper work?]
 
 ----
 
@@ -15,3 +16,8 @@ Actually JMapper is being developed as an OSGi bundle. So you are able to instal
 
 ==Is JMapper modular?==
 Yes, JMapper is modular and it differs between plugins and modules. You can find out more about modules and plugins [ExtInfo here].
+
+==How does JMapper work?==
+JMapper defines your interface via reflection. Each access on the map happens inside the method. JMapper itself does *not* create any fields in the object returned by its factory. This is important, because you can not get the map out of the created object by reflection.
+
+So JMapper can provide strict access to your map.
