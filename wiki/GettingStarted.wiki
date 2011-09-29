@@ -7,7 +7,6 @@ Welcome to the Getting Started. I will show you the basics of JMapper and how to
  * [GettingStarted#Using_@link Using @Link]
  * [GettingStarted#Grant_write_permission Grant write permission]
  * [GettingStarted#Parser Parser]
- * [GettingStarted#Adapter Adpater]
 
 ----
 
