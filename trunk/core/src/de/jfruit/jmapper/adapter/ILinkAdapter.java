@@ -1,8 +1,8 @@
 package de.jfruit.jmapper.adapter;
 
-public interface ILinkAdapter<K,T,S> 
+public interface ILinkAdapter<Key,Result,ParameterType>
 {
-	K key();
-	T defValue();
-	T parse(S source);
+	Key key();
+	Result defValue();
+	Result parse(ParameterType source);
 }
