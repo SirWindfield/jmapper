@@ -11,7 +11,7 @@ Welcome to the Getting Started. I will show you the basics of JMapper and how to
 ----
 
 == Using @Link ==
-The simplest way to create bindings between your interface and your map is to use Links. Link is an annotation having 2 paramaters:
+The simplest way to create bindings between your interface and your map is to use Link(s). Link is an annotation having 2 parameters:
 
 `String key [required]` each entry of your map has a key. This key is required for the binding. If the map does not contain this key, the method will return `null` or `0`
 
