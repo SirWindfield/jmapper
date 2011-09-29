@@ -1,0 +1,75 @@
+#Getting Started with JMapper
+
+= Getting Started =
+
+Welcome to the Getting Started. I will show you the basics of JMapper and how to use them. Here is the table of contents:
+
+ * [GettingStarted#Using_@link Using @Link]
+ * [GettingStarted#Grant_write_permission Grant write permission]
+ * [GettingStarted#Parser Parser]
+ * [GettingStarted#Adapter Adpater]
+
+----
+
+== Using @Link ==
+The simplest way to create bindings between your interface and your map is to use Links. Link is an annotation having 2 paramaters:
+
+`String key [required]` each entry of your map has a key. This key is required for the binding. If the map does not contain this key, the method will return `null` or `0`
+
+`Class<? extends ILinkParser<>> [optional]` this parameter will be explained later in the Getting Started.
+
+Now we will define an interface (read-only) which will be bind to a map containing several applicationdata:
+
+{{{
+/**
+ * A interface with read-only permission 
+ */
+public interface IConfiguration 
+{	
+	@Link(key="appName")
+	String getAppName();	
+	
+	@Link(key="major")
+	int getMajorVersionNumber();
+	
+	@Link(key="minor")
+	int getMinorVersionNumber();
+	
+	@Link(key="mikro")
+	int getMikroVersionNumber();
+}
+}}}
+
+If you've read the information above, there should no questions left at this point. So I will continue with a simple main:
+
+{{{
+public class GettingStarted 
+{
+	public static void main(String[] args) 
+	{
+		Properties props=new Properties();		
+		IConfiguration config=JMapper.createFromMap(props, IConfiguration.class);
+		System.out.println("AppName: " + config.getAppName());
+	}
+}
+}}}
+
+As you can see, we have a map (Properties) and JMapper will define the interface for us. But our interface contains no data, so `System.out.println("AppName: " + config.getAppName());`
+will print 
+
+`AppName: null`
+
+to the console. If you want to get a result containing the application name, you have to store a value in the map, with the key: appName:
+{{{
+Properties props=new Properties();
+// Storing some data in the map
+props.setProperty("appName", "name of the Application");
+IConfiguration config=JMapper.createFromMap(props, IConfiguration.class);
+System.out.println("AppName: " + config.getAppName());
+}}}
+
+Run the application again and you can read:
+
+`AppName: name of the Application`
+
+in your console.
