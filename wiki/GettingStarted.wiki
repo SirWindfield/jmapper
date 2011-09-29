@@ -1,4 +1,4 @@
-#Getting Started with JMapper
+#summary Getting Started with JMapper
 
 = Getting Started =
 
