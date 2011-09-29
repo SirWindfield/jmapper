@@ -36,7 +36,7 @@ public interface IConfiguration
 }
 }}}
 
-If you've read the information above, there should no questions left at this point. So I will continue with a simple main:
+If you've read the information above, there should no questions be left at this point. So I will continue with a simple main:
 
 {{{
 public class GettingStarted 
