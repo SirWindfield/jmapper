@@ -113,3 +113,61 @@ From config : New Title
 }}}
 
 JMapper also has linked the extended interface correctly. This example also shows you: the interfaces have live-bindings to the map, because the changes are immediately accessable through our read-only interface.
+
+----
+
+== Parser ==
+
+Above I told you: It seems reading is no problem. The point is: it only seems there would be no problem. Lets try out following:
+
+{{{
+Properties props = new Properties();
+props.setProperty("minor", "42");		
+IConfiguration config = JMapper.createFromMap(props,IConfiguration.class);
+System.out.println("Minor-version: " + config.getMinorVersionNumber());
+}}}
+
+If you now have expected a result like this:
+{{{
+Minor-version: 42
+}}}
+then I have bad news for you. The result is:
+{{{
+Minor-version: 0
+}}}
+
+But why? To get this, we have to look at our method:
+{{{
+@Link(key="minor")
+int getMinorVersionNumber();
+}}}
+JMapper expects an Integer as returntype but got a String. To get JMapper work with the String you have to use a parser. At once we need a new class implementing ILinkParser with a default constructor(!important!):
+{{{
+public class StringToIntegerParser implements ILinkParser<Integer,String>
+{
+	@Override
+	public Integer defValue() {
+		return 0;
+	}
+
+	@Override
+	public Integer parse(String source) {
+		return Integer.valueOf(source);
+	}
+	
+}
+}}}
+
+Now we have to tell JMapper, that it should use this class to parse our String to an Integer. You can do this, by using the second parameter of your Link annotation:
+{{{
+@Link(key="minor", parser=StringToIntegerParser.class)
+int getMinorVersionNumber();
+}}}
+
+Now re-run your main without any changes and you will get your expected result: 42!
+
+Of course you could have stored the 42 like this:
+{{{
+props.put("minor", 42);
+}}}
+without getting any trouble.
