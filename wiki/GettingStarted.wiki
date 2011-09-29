@@ -20,9 +20,6 @@ The simplest way to create bindings between your interface and your map is to us
 Now we will define an interface (read-only) which will be linked to a map containing several applicationdata:
 
 {{{
-/**
- * A interface with read-only permission 
- */
 public interface IConfiguration 
 {	
 	@Link(key="appName")
