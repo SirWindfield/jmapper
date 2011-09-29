@@ -74,7 +74,7 @@ in your console.
 
 == Grant write permission ==
 
-Reading seems to be no problem, but now we want an interface that can write to the map. We could add some methods to our IConfiguration but we also could create a new one. Lets call it IWritableConfiguration and this interface will extend IConfiguration:
+Reading seems to be no problem, but now we'd like to have an interface that can write to the map. We could add some methods to our IConfiguration but we also could create a new one. Lets call it IWritableConfiguration and this interface will extend IConfiguration:
 
 {{{
 public interface IWritableConfiguration extends IConfiguration
@@ -84,7 +84,7 @@ public interface IWritableConfiguration extends IConfiguration
 }
 }}} 
 
-At this point, you should have noticed, that nor our getter or our setter has any flag e.g. TYPE.GETTER or TYPE.SETTER. JMapper recognize what type of bean your method is. JMapper at once checks if the returntype is void. In this case JMapper will handle the method like a setter. If not, JMapper looks if the method starts with "set". Well, you better use java beans or JMapper may will handle it wrong. 
+At this point, you should have noticed, that neither our getter nor our setter has any flag like TYPE.GETTER or TYPE.SETTER. JMapper recognize what type of bean your method is. JMapper at once checks if the returntype is void. In this case JMapper will handle the method like a setter. If not, JMapper looks if the method starts with "set"<sub>(true->setter|false->getter)</sub>. Well, you better use java beans or JMapper may will handle it wrong. 
 
 I've modified our main-method for testing our changes:
 {{{
@@ -154,7 +154,7 @@ public class StringToIntegerParser implements ILinkParser<Integer,String>
 }
 }}}
 
-Now we have to tell JMapper, that it should use this class to parse our String to an Integer. You can do this, by using the second parameter of your Link annotation:
+Now we have to tell JMapper, that it should use this class to parse our String to an Integer. You can do this by using the second parameter of your Link annotation:
 {{{
 @Link(key="minor", parser=StringToIntegerParser.class)
 int getMinorVersionNumber();
