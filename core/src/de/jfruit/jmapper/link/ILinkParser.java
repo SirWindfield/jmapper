@@ -1,7 +1,7 @@
 package de.jfruit.jmapper.link;
 
-public interface ILinkParser<T,S> 
+public interface ILinkParser<Result,ParameterType> 
 {
-	T defValue();
-	T parse(S source);
+	Result defValue();
+	Result parse(ParameterType source);
 }
