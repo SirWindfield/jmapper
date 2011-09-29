@@ -17,7 +17,7 @@ The simplest way to create bindings between your interface and your map is to us
 
 `Class<? extends ILinkParser<>> [optional]` this parameter will be explained later in the Getting Started.
 
-Now we will define an interface (read-only) which will be bind to a map containing several applicationdata:
+Now we will define an interface (read-only) which will be linked to a map containing several applicationdata:
 
 {{{
 /**
