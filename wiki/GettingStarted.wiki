@@ -1,4 +1,5 @@
 #summary Getting Started with JMapper
+#labels Featured
 
 = Getting Started =
 
