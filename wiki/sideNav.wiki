@@ -1,6 +1,7 @@
  * [Introduction Introduction]
  * [AboutJMapper About JMapper]
  * [GettingStarted Getting Started]
+ * [WhatsNew Whats New?]
  * Mapping
   * [MappingInfo Information]
   * [MappingLinker Linker]
