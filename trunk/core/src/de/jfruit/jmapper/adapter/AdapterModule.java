@@ -11,7 +11,7 @@ import de.jfruit.jmapper.ext.MapperModule;
 public class AdapterModule implements MapperModule<Adapter>
 {
 	@Override
-	public Object executeModule(MethodType type, Adapter anno, Map<Object, Object> prop, Object[] parameter, Class<?> returnType, Object worstCaseResult) 
+	public Object executeModule(final MethodType type, final Adapter anno, final Map<Object, Object> prop, final Object[] parameter, final Class<?> returnType, final Object worstCaseResult) 
 	{
 		if(prop==null || type==MethodType.SETTER)
 			return worstCaseResult;
@@ -42,5 +42,11 @@ public class AdapterModule implements MapperModule<Adapter>
 		}
 		
 		return worstCaseResult;
+	}
+	
+	@Override
+	public void updateCall(final MethodType type, final Adapter anno, final Map<Object, Object> prop, final Object[] parameter, final Object newValue, final int plgCount) 
+	{
+		
 	}
 }

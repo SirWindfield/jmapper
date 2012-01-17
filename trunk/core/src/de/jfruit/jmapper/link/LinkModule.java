@@ -14,7 +14,7 @@ public class LinkModule implements MapperModule<Link>
 	private static Map<Class<?>, ILinkParser<?,?>> parserCache=new HashMap<Class<?>, ILinkParser<?,?>>();
 	
 	@Override
-	public Object executeModule(MethodType type, Link anno, Map<Object, Object> prop, Object[] parameter, Class<?> expectedReturnType, Object worstCaseResult) 
+	public Object executeModule(final MethodType type, final Link anno, final Map<Object, Object> prop, final Object[] parameter, final Class<?> expectedReturnType, final Object worstCaseResult) 
 	{
 		if(prop==null)
 			return worstCaseResult;
@@ -35,7 +35,7 @@ public class LinkModule implements MapperModule<Link>
 		return worstCaseResult;
 	}	
 	
-	private Object methodGetter(Link link, Map<Object,Object> prop, Class<?> linkParserClass, Object rwc) throws Exception
+	private Object methodGetter(final Link link, final Map<Object,Object> prop, final Class<?> linkParserClass, final Object rwc) throws Exception
 	{
 		String key=link.key();
 		
@@ -53,7 +53,7 @@ public class LinkModule implements MapperModule<Link>
 		return parser.defValue();
 	}		
 	
-	private Object methodSetter(Link link, Object[] params, Map<Object, Object> prop,Class<?> parserClass, Object rwc) throws Exception
+	private Object methodSetter(final Link link, final Object[] params, final Map<Object, Object> prop,final Class<?> parserClass, final Object rwc) throws Exception
 	{
 		if(params.length!=1)
 			return rwc;			
@@ -70,7 +70,7 @@ public class LinkModule implements MapperModule<Link>
 		return params[0];
 	}
 	
-	private ILinkParser<?,?> cachedInstance(Class<?> ilpClass) throws Exception
+	private ILinkParser<?,?> cachedInstance(final Class<?> ilpClass) throws Exception
 	{
 		if(!parserCache.containsKey(ilpClass)) {
 			Constructor<?> constr=ilpClass.getDeclaredConstructor();
@@ -81,5 +81,23 @@ public class LinkModule implements MapperModule<Link>
 		}
 		
 		return parserCache.get(ilpClass);
+	}
+
+	@Override
+	public void updateCall(final MethodType type, final Link anno, final Map<Object, Object> prop, final Object[] param, final Object newValue, final int plgCount) 
+	{			
+		if(anno.plugins() && type==MethodType.SETTER && plgCount>0) {
+			try {
+				Object[] use=param;
+				if(param.length>0)
+					use[0]=newValue;
+				else
+					use=new Object[] {newValue};
+				
+				methodSetter(anno, use, prop, anno.parser(), prop.get(anno.key()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}
 	}
 }

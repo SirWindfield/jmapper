@@ -11,10 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.jfruit.jmapper.JMapperExceptionHandler.InvalidAnnotation;
+import de.jfruit.jmapper.JMapperExceptionHandler.JMapperException;
 import de.jfruit.jmapper.adapter.Adapter;
 import de.jfruit.jmapper.adapter.AdapterModule;
 import de.jfruit.jmapper.ext.MapperModule;
 import de.jfruit.jmapper.ext.MapperPlugin;
+import de.jfruit.jmapper.ext.ModuleExtension;
+import de.jfruit.jmapper.ext.PluginExtension;
 import de.jfruit.jmapper.link.Link;
 import de.jfruit.jmapper.link.LinkModule;
 
@@ -38,8 +42,13 @@ public class JMapper
 	
 	/**
 	 * This method will install you're Plugin or Module and register it with the given Annotation.
+	 * 
+	 * @throws
+	 * InvalidAnnotation if the Annotation isn't valid
+	 * @throws
+	 * JMapperException 
 	 */
-	public static <T extends Annotation> void install(Class<T> annotation, Class<?> instClass)
+	public static <T extends Annotation> void install(final Class<T> annotation, final Class<?> instClass)
 	{
 		try {
 			for(Type genType : instClass.getGenericInterfaces()) {
@@ -50,15 +59,48 @@ public class JMapper
 						constr.setAccessible(true);						
 						
 						if(type.getRawType() == MapperModule.class) {
-							modules.put(annotation, (MapperModule<? extends Annotation>) constr.newInstance());
-						}
-						if(type.getRawType() == MapperPlugin.class) {
-							plugins.put(annotation, (MapperPlugin<? extends Annotation>) constr.newInstance());
+							if(annotation.isAnnotationPresent(ModuleExtension.class))
+								modules.put(annotation, (MapperModule<? extends Annotation>) constr.newInstance());
+							else
+								throw new JMapperExceptionHandler.InvalidAnnotation(annotation, ModuleExtension.class);
+						} else if(type.getRawType() == MapperPlugin.class) {
+							if(annotation.isAnnotationPresent(PluginExtension.class))
+								plugins.put(annotation, (MapperPlugin<? extends Annotation>) constr.newInstance());
+							else								
+								throw new JMapperExceptionHandler.InvalidAnnotation(annotation, PluginExtension.class);
 						}
 						return;
 					}
 				}
 			}
+		} catch (JMapperException e)  {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void installExt(final Class<?> instClass) 
+	{
+		try {
+			for(Type genType : instClass.getGenericInterfaces()) {
+				ParameterizedType type=(ParameterizedType) genType;
+				for(Type realType : type.getActualTypeArguments()) {
+					Class<?> getType=(Class<?>) realType;
+					if(getType.isAnnotation()) {
+						Class<? extends Annotation> annotatedType=(Class<? extends Annotation>) getType;
+						
+						if((getType.isAnnotationPresent(PluginExtension.class) && ((Class<?>)type.getRawType()).isAssignableFrom(MapperPlugin.class)) ||
+						   (getType.isAnnotationPresent(ModuleExtension.class) && ((Class<?>)type.getRawType()).isAssignableFrom(MapperModule.class))) 
+						{
+							installIntern(annotatedType, instClass);
+							continue;
+						} 
+					}
+				}
+			}
+		} catch (JMapperException e) {
+			throw e;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -66,18 +108,49 @@ public class JMapper
 	
 	/**
 	 * This method will install you're Plugin or Module and register it with the given Annotation.
+	 * 
+	 * @throws
+	 * InvalidAnnotation
 	 */
-	public static <T extends Annotation> void install(Class<T> annotation, MapperModule<? extends T> module)
+	public static <T extends Annotation> void install(final Class<T> annotation, final MapperModule<? extends T> module)
 	{
-		modules.put(annotation, module);
+		if(annotation.isAnnotationPresent(ModuleExtension.class))
+			modules.put(annotation, module);
+		else
+			throw new JMapperExceptionHandler.InvalidAnnotation(annotation, ModuleExtension.class);
 	}
 	
 	/**
 	 * This method will install you're Plugin or Module and register it with the given Annotation.
+	 * 
+	 * @throws
+	 * InvalidAnnotation
 	 */
-	public static <T extends Annotation> void install(Class<T> annotation, MapperPlugin<? extends T> module)
+	public static <T extends Annotation> void install(final Class<T> annotation, final MapperPlugin<? extends T> module)
 	{
-		plugins.put(annotation, module);
+		if(annotation.isAnnotationPresent(PluginExtension.class))
+			plugins.put(annotation, module);
+		else 
+			throw new JMapperExceptionHandler.InvalidAnnotation(annotation, PluginExtension.class);
+	}
+	
+	private static <T extends Annotation> void installIntern(final Class<T> annotation, final Class<?> extension)
+	{
+		Object instance=null;
+		
+		try {
+			Constructor<?> constr=extension.getDeclaredConstructor();
+			constr.setAccessible(true);
+			
+			instance=constr.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(annotation.isAnnotationPresent(PluginExtension.class))
+			plugins.put(annotation, (MapperPlugin<? extends Annotation>) instance);
+		else if(annotation.isAnnotationPresent(ModuleExtension.class))
+			modules.put(annotation, (MapperModule<? extends Annotation>) instance);
 	}
 	
 	static {
@@ -90,12 +163,12 @@ public class JMapper
 	 * The interface will work on the real Map on with the registered modules/plugins (even if you will install them
 	 * after calling this method).
 	 */
-	public static <T> T createFromMap(final Map<Object, Object> prop, Class<T> interf)
+	public static <T> T createFromMap(final Map<Object, Object> prop, final Class<T> interf)
 	{
 		return (T) Proxy.newProxyInstance(JMapper.class.getClassLoader(), new Class<?>[]{interf}, new InvocationHandler() {
 			
 			@Override
-			public Object invoke(Object obj, Method method, Object[] params) throws Throwable 
+			public Object invoke(final Object obj, final Method method, final Object[] params) throws Throwable 
 			{
 				Class<?> returnType=method.getReturnType();
 				Object resultInWorstCase=(returnType.isPrimitive()) ? ((returnType==Boolean.class || returnType==boolean.class) ? false : 0) : null;				
@@ -104,35 +177,48 @@ public class JMapper
 				
 				Object moduleResult=resultInWorstCase;
 				
+				Annotation annotationUsed=null;
+				MapperModule<Annotation> mapperMod=null;
+				
+				// Invoke main-Module
 				for(Entry<Class<? extends Annotation>, MapperModule<? extends Annotation>> mod : modules.entrySet())
 				{
 					if(method.isAnnotationPresent(mod.getKey())) {
-						moduleResult=((MapperModule<Annotation>)mod.getValue()).executeModule(methodType, method.getAnnotation(mod.getKey()), prop, params, returnType, resultInWorstCase);
+						annotationUsed=method.getAnnotation(mod.getKey());
+						moduleResult=(mapperMod=(MapperModule<Annotation>)mod.getValue()).executeModule(methodType, annotationUsed, prop, params, returnType, resultInWorstCase);
 						
-						if(methodType.equals(MethodType.GETTER) && moduleResult!=resultInWorstCase && !checkTypes(returnType, moduleResult.getClass())) {
+						if(methodType.equals(MethodType.GETTER) && moduleResult!=resultInWorstCase && !checkTypes(returnType, moduleResult.getClass())) {							
 							moduleResult=resultInWorstCase;							
 						}						
 						break;
 					}
 				}
+								
+				int plgCount=0;
 				
+				// Invoke the plugins
 				for(Entry<Class<? extends Annotation>, MapperPlugin<? extends Annotation>> plugin : plugins.entrySet())
 				{
 					if(method.isAnnotationPresent(plugin.getKey())) {
+						Object tmpResult=((MapperPlugin<Annotation>)plugin.getValue()).executePlugin(methodType, method.getAnnotation(plugin.getKey()), prop, params, moduleResult, resultInWorstCase);						
 						
-						Object tmpResult=((MapperPlugin<Annotation>)plugin.getValue()).executePlugin(methodType, method.getAnnotation(plugin.getKey()), prop, params, moduleResult, resultInWorstCase);
-						
-						if(returnType.isAssignableFrom(tmpResult.getClass()))
-							moduleResult=tmpResult;
+						if(!checkTypes(returnType, tmpResult.getClass())) {
+							plgCount++;
+							moduleResult=tmpResult;							
+						}
 					}
 				}
+				
+				// Update the module
+				if(mapperMod!=null && annotationUsed!=null)
+					mapperMod.updateCall(methodType, annotationUsed, prop, params, moduleResult, plgCount);				
 				
 				return moduleResult;
 			}
 		});
 	}	
 	
-	private static MethodType findMethodType(Method currentMethod, boolean disableVoidCheck)
+	private static MethodType findMethodType(final Method currentMethod, final boolean disableVoidCheck)
 	{
 		if(!disableVoidCheck) {
 			if(currentMethod.getReturnType().equals(Void.class))
@@ -145,7 +231,7 @@ public class JMapper
 		return MethodType.GETTER;
 	}
 	
-	private static boolean checkTypes(Class<?> expected, Class<?> resultType) 
+	private static boolean checkTypes(final Class<?> expected, final Class<?> resultType) 
 	{
 		if(!expected.isPrimitive())
 			return expected.isAssignableFrom(resultType);
