@@ -6,11 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import de.jfruit.jmapper.NullParser;
+import de.jfruit.jmapper.ext.ModuleExtension;
 
-@Retention(RetentionPolicy.RUNTIME)
+@ModuleExtension
 @Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Link
 {
 	String key();	
 	Class<? extends ILinkParser<?,?>> parser() default NullParser.class;
+	boolean plugins() default true;
 }
