@@ -2,7 +2,7 @@
 
 =Whats new?=
 
-==Rev 57==
+==Rev 64==
 
  * [WhatsNew#Extension_Annotation Extension Annotation]
  * [WhatsNew#InstallExt InstallExt]
