@@ -11,4 +11,4 @@
   * [ExtPlugin Plugin]
   * [ExtModule Module]
  * Community
-  * [http://www.java-forum.org java-forum.org]
+  * [http://www.byte-welt.net byte-welt.net]
